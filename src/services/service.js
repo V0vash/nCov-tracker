@@ -14,16 +14,41 @@ const getResource = async (url) => {
 
 const getAllCountries = async () => {
     const result = await getResource(`/countries`);
-    return result.map(_transformCountries)
+    return result;
 }
 
 const _transformCountries = (country) => {
     return{
         name: country.country,
         value: country.countryInfo.iso2,
-        id: country.countryInfo._id
+        id: country.countryInfo.iso2 + country.countryInfo._id
     };
 }
 
+const _sortData = (data) =>{
+    const sortedData = [...data];
+    return sortedData.sort((a,b) => a.cases > b.cases ? -1 : 1)
+}
+
+const _buildChartData = (data, casesType = 'cases') =>{
+    const chartData = [];
+    let lastDataPoint ;
+
+    for(let date in data[casesType]){
+        if(lastDataPoint){
+            const newDataPoint ={
+                x: date,
+                y: data[casesType][date] -lastDataPoint  //cases
+            }
+            chartData.push(newDataPoint);
+        }
+        lastDataPoint = data[casesType][date];
+    }
+    return chartData;
+}
+
 export {getResource,
-        getAllCountries,}
+        getAllCountries,
+    _transformCountries,
+    _sortData,
+    _buildChartData}

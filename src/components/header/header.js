@@ -1,28 +1,10 @@
-import React,{useState, useEffect} from 'react';
+import React from 'react';
 import {
     FormControl, Select, MenuItem
   } from '@material-ui/core';
-// import {getAllCountries} from '../../services/service';
 import './header.css';
 
 const Header = ({onCountryChange, country, countries}) => {
-
-//   const [countries, setCountries] = useState([]);
-//   const [country, setCountry] = useState('worldwide');
-
-//   useEffect(() =>{
-//     getAllCountries()
-//       .then((countries)=>{
-//         console.log('>>>>',countries);
-//         setCountries(countries);
-//       });
-      
-//   },[])
-
-//   const onCountryChange = (event) =>{
-//     const countryCode = event.target.value;
-//     setCountry(countryCode);
-//   }
 
     return(
         <div className="app__header">
@@ -30,11 +12,12 @@ const Header = ({onCountryChange, country, countries}) => {
           <FormControl className='app__dropdown'>
             <Select
               variant='outlined'
+              key={country}
               value={country}
               onChange={onCountryChange}>
                 <MenuItem value='worldwide'>Worldwide</MenuItem>
                 {countries.map((country) => {
-                  return <MenuItem key={country.id} value={country.value}>{country.name}</MenuItem>
+                  return <MenuItem key={country.name} value={country.value}>{country.name}</MenuItem>
                 })}
               </Select>
           </FormControl>
