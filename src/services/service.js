@@ -21,7 +21,7 @@ const _transformCountries = (country) => {
     return{
         name: country.country,
         value: country.countryInfo.iso2,
-        id: country.countryInfo.id
+        id: country.countryInfo._id
     };
 }
 

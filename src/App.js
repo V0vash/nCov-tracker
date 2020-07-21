@@ -1,57 +1,67 @@
 import React,{useState, useEffect} from 'react';
-import {
-  FormControl, Select, MenuItem, Card
-} from '@material-ui/core';
-import {getAllCountries} from './services/service';
+import { Card, CardContent} from '@material-ui/core';
+import Header from './components/header/header';
+import InfoBox from './components/info-box/infoBox';
+import {getResource, getAllCountries} from './services/service';
 import './App.css';
 
 function App() {
 
   const [countries, setCountries] = useState([]);
   const [country, setCountry] = useState('worldwide');
+  const [countryInfo, setCountryInfo] = useState({});
+
+//first load = worldwide
+  useEffect(() => {
+    getResource('/all')
+    .then(data =>{
+      setCountryInfo(data);
+     });
+  },[]);
 
   useEffect(() =>{
     getAllCountries()
       .then((countries)=>{
-        console.log('>>>>',countries);
         setCountries(countries);
       });
-      
-  },[])
+  },[]);
 
   const onCountryChange = (event) =>{
     const countryCode = event.target.value;
     setCountry(countryCode);
-  }
+
+    const url = countryCode === 'worldwide' ? '/all' : `/countries/${countryCode}`;
+    getResource(url)
+     .then(data =>{
+      setCountry(countryCode);
+      setCountryInfo(data);
+     });
+  };
 
   return (
     <div className="app">
       <div className="app__left">
-        <div className="app__header">
-          <h1>Covid tracker</h1>
-          <FormControl className='app__dropdown'>
-            <Select
-              variant='outlined'
-              value={country}
-              onChange={onCountryChange}>
-                <MenuItem value='worldwide'>Worldwide</MenuItem>
-                {countries.map((country) => {
-                  return <MenuItem key={country.id} value={country.value}>{country.name}</MenuItem>
-                })}
-              </Select>
-          </FormControl>
-          {/* info boxes */}
-          {/* map */}
+        <Header 
+        country={country}
+        countries={countries}
+        onCountryChange={onCountryChange}/>
+
+        <div className="app__stats">
+          <InfoBox title="Cases" cases={countryInfo.todayCases} total={countryInfo.cases}/>
+          <InfoBox title="Recovered" cases={countryInfo.todayRecovered} total={countryInfo.recovered}/>
+          <InfoBox title="Deaths" cases={countryInfo.todayDeaths} total={countryInfo.deaths}/>
         </div>
+
+          {/* map */}
+        
       </div>
 
-        <div className="app__right">
-        <Card>
-          <h3>Cases by country</h3>
-          {/* cases */}
-          {/* graph */}
+  
+        <Card className="app__right">
+          <CardContent>
+            <h3>Cases by country</h3>
+          </CardContent>
         </Card>
-        </div>
       
 
       {/* {Header} */}
