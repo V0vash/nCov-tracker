@@ -11,7 +11,7 @@ body{
   padding: 10px;
 }
 .app__left{
-  flex-grow: 0;
+  flex-grow: 0.7;
 }
 .app__stats{
   display: flex;
@@ -28,6 +28,9 @@ body{
 @media (max-width: 800px){
   .app{
     flex-direction: column;
+  }
+  .app__right{
+    margin-top: 20px;
   }
 }
 

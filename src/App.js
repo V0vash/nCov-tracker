@@ -5,6 +5,7 @@ import Header from './components/header/header';
 import InfoBox from './components/info-box/infoBox';
 import Table from './components/table/table';
 import Map from './components/map/map';
+import 'leaflet/dist/leaflet.css';
 import LineGraph from'./components/lineGraph/lineGraph';
 
 import './App.css';
@@ -15,7 +16,10 @@ function App() {
   const [country, setCountry] = useState('worldwide');
   const [countryInfo, setCountryInfo] = useState({});
   const [tableData, setTableData] = useState([]);
-
+  const [mapCenter, setMapCenter] = useState({
+    lat: 34, lng: -40
+  });
+  const [mapZoom, setMapZoom] = useState(3);
 
 //first load = worldwide
   useEffect(() => {
@@ -43,6 +47,13 @@ function App() {
      .then(data =>{
       setCountry(countryCode);
       setCountryInfo(data);
+      if(url === '/all'){
+        setMapCenter([34 , -40]);
+        setMapZoom(3);
+      }else{
+        setMapCenter([data.countryInfo.lat, data.countryInfo.long]);
+        setMapZoom(4);
+      }
      });
   };
 
@@ -60,7 +71,9 @@ function App() {
           <InfoBox title="Deaths" cases={countryInfo.todayDeaths} total={countryInfo.deaths}/>
         </div>
 
-        <Map/>
+        <Map
+         center={mapCenter}
+         zoom={mapZoom}/>
 
       </div>
 
@@ -74,8 +87,6 @@ function App() {
           </CardContent>
         </Card>
       
-
-      {/* {Header} */}
     </div>
   );
 }

@@ -4,18 +4,18 @@ import {getResource,_buildChartData} from '../../services/service';
 import options from './lineGraphOptions';
 
 
-function LineGraph() {
+function LineGraph({casesType = 'cases'}) {
 
     const [data, setData] = useState({});
 
     useEffect(()=>{
         getResource('/historical/all?lastdays=120')
         .then(data =>{
-            setData(_buildChartData(data));
+            setData(_buildChartData(data, casesType));
         })
     }, []);
 
-    console.log(data);
+    // console.log(data);
 
     return (
         <div>
