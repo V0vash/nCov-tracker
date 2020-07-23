@@ -1,0 +1,21 @@
+.infoBox{
+    flex: 1;
+    text-align: center;
+    cursor: pointer;
+}
+
+.infoBox:not(:last-child){
+    margin-right: 15px;
+}
+
+.infoBox--selected-cases{
+    border-top: 10px solid rgba(204, 16, 52, 0.5);
+}
+
+.infoBox--selected-recovered{
+    border-top: 10px solid rgba(125, 215, 29, 0.5);
+}
+
+.infoBox--selected-deaths{
+    border-top: 10px solid rgba(251, 68, 67, 0.5);
+}

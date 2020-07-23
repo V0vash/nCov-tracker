@@ -19,7 +19,9 @@ function App() {
   const [mapCenter, setMapCenter] = useState({
     lat: 34, lng: -40
   });
-  const [mapZoom, setMapZoom] = useState(3);
+  const [mapZoom, setMapZoom] = useState(2);
+  const [mapCountries, setMapCountries] = useState([]);
+  const [casesType, setCasesType] = useState('cases');
 
 //first load = worldwide
   useEffect(() => {
@@ -32,6 +34,7 @@ function App() {
   useEffect(() =>{
     getAllCountries()
       .then((data)=>{
+        setMapCountries(data);
         const countries = data.map(_transformCountries);
         setCountries(countries);
         setTableData(_sortData(data));
@@ -49,7 +52,7 @@ function App() {
       setCountryInfo(data);
       if(url === '/all'){
         setMapCenter([34 , -40]);
-        setMapZoom(3);
+        setMapZoom(2);
       }else{
         setMapCenter([data.countryInfo.lat, data.countryInfo.long]);
         setMapZoom(4);
@@ -66,14 +69,31 @@ function App() {
         onCountryChange={onCountryChange}/>
 
         <div className="app__stats">
-          <InfoBox title="Cases" cases={countryInfo.todayCases} total={countryInfo.cases}/>
-          <InfoBox title="Recovered" cases={countryInfo.todayRecovered} total={countryInfo.recovered}/>
-          <InfoBox title="Deaths" cases={countryInfo.todayDeaths} total={countryInfo.deaths}/>
+          <InfoBox 
+          activeCases={casesType === 'cases'}
+          onClick={() => setCasesType('cases')}
+          title="Cases" 
+          cases={countryInfo.todayCases}
+          total={countryInfo.cases}/>
+          <InfoBox
+          activeRecovered={casesType === 'recovered'}
+          onClick={() => setCasesType('recovered')}
+          title="Recovered"
+          cases={countryInfo.todayRecovered} 
+          total={countryInfo.recovered}/>
+          <InfoBox
+          activeDeath={casesType === 'deaths'}
+          onClick={() => setCasesType('deaths')}
+          title="Deaths" 
+          cases={countryInfo.todayDeaths} 
+          total={countryInfo.deaths}/>
         </div>
 
         <Map
-         center={mapCenter}
-         zoom={mapZoom}/>
+          casesType={casesType}
+          countries={mapCountries}
+          center={mapCenter}
+          zoom={mapZoom}/>
 
       </div>
 
@@ -82,8 +102,8 @@ function App() {
           <CardContent>
             <h3>Cases by country</h3>
             <Table countries={tableData}/>
-            <h3>graph</h3>
-            <LineGraph/>
+            <LineGraph
+            casesType={casesType}/>
           </CardContent>
         </Card>
       
