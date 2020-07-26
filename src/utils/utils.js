@@ -24,7 +24,7 @@ const casesTypeColors = {
 }
 
 
-//draw o on map with tooltips
+//draw circle on map with tooltips
 export const showDataOnMap = (data, casesType='cases') => (
     data.map(country => (
         <Circle
@@ -36,7 +36,12 @@ export const showDataOnMap = (data, casesType='cases') => (
         >
         
             <Popup>
-                <h1>INFO</h1>
+                {console.log('circle data',country)}
+                <h2>{country.country}</h2>
+                <img src={country.countryInfo.flag} alt={country.country}></img>
+                <h3>Total cases: {numeral(country.cases).format(0,0)}</h3>
+                <h3>Total recovered: {numeral(country.recovered).format(0,0)}</h3>
+                <h3>Total deaths: {numeral(country.deaths).format(0,0)}</h3>
             </Popup>
 
         </Circle>

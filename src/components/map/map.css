@@ -11,3 +11,9 @@
 .map .leaflet-container{
     height: 100%;
 }
+.map .leaflet-popup h2{
+    text-align: center;
+}
+.map .leaflet-popup img{
+width: 100%;
+}
